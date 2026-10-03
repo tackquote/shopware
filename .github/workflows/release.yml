@@ -1,0 +1,63 @@
+name: Release Shopware ZIPs
+
+# Publishes both Shopware artifacts as GitHub Release assets when a v* tag is
+# pushed:
+#
+#   tack-shopware.zip       self-hosted plugin   (TackQuote/...)
+#   tack-shopware-app.zip   Shopware Cloud app   (TackQuoteApp/...)
+#
+# Carried over from the former monorepo (ackm04/tack-ecommerce-extensions),
+# whose release.yml built every platform via scripts/package-all.sh. This repo
+# keeps the Shopware half of that: scripts/package.sh produces the SAME
+# filenames and the SAME internal zip structure, so README links of the form
+# `releases/latest/download/<asset>` keep resolving to the same kind of file.
+#
+# Never hand-build or hand-upload a release zip. The monorepo's history is the
+# reason: hand-built assets drifted from the source (wrong top-level directory,
+# files that existed nowhere in the repository) and installed but did nothing.
+#
+# To cut a release: push a `v*` tag. That's the whole process — this workflow
+# does the rest.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install xmllint (manifest XSD validation)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libxml2-utils
+
+      - name: Lint PHP
+        run: |
+          find . -path ./dist -prune -o -name '*.php' -print0 \
+            | xargs -0 -n1 -P4 php -l
+
+      - name: Validate app manifest
+        run: python3 TackQuoteApp/bin/validate-manifest.py
+
+      - name: Build Shopware artifacts
+        run: bash scripts/package.sh dist
+
+      - name: Attach ZIPs to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          generate_release_notes: true

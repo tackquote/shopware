@@ -1,0 +1,19 @@
+# OS / editor noise
+.DS_Store
+._*
+__MACOSX/
+.idea/
+.vscode/
+
+# Build output from scripts/package.sh and TackQuoteApp/bin/build-zip.sh
+dist/
+
+# Dependency installs (never committed)
+node_modules/
+vendor/
+composer.lock
+target/
+
+# PHPUnit caches
+.phpunit.cache/
+.phpunit.result.cache

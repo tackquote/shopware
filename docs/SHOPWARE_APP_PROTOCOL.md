@@ -1,6 +1,6 @@
 # Shopware App registration & signing protocol (verified)
 
-Reference notes for `shopware/TackQuoteApp` and for the TackQuote API endpoints that
+Reference notes for `TackQuoteApp/` and for the TackQuote API endpoints that
 serve it (`apps/api/src/modules/integrations/shopware-app/` in the `ackm04/tack` repo).
 
 **Every claim below was verified against Shopware's own source code**, not against

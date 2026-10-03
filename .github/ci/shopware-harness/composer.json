@@ -1,0 +1,14 @@
+{
+  "name": "tackquote/shopware-ci-harness",
+  "description": "CI-only harness: the minimal Shopware vendor tree TackQuote/tests/TestBootstrap.php needs (no kernel, database or network). Not shipped.",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "shopware/core": "6.6.10.22",
+    "shopware/storefront": "6.6.10.22",
+    "phpunit/phpunit": "^11.5"
+  },
+  "config": {
+    "allow-plugins": true
+  }
+}

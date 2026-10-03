@@ -33,7 +33,7 @@
 set -Eeuo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-APP_DIR="$(dirname "$HERE")"          # .../shopware/TackQuoteApp
+APP_DIR="$(dirname "$HERE")"          # .../TackQuoteApp
 APP_NAME="$(basename "$APP_DIR")"     # TackQuoteApp — must equal <meta><name>
 OUT="${1:-$APP_DIR/dist}"
 

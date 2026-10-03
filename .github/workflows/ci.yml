@@ -1,0 +1,78 @@
+name: CI
+
+# Lint, manifest validation, package build and the TackQuote plugin's unit
+# suite on every push and pull request to main.
+#
+# The PHPUnit suite needs no Shopware kernel, database or network (see
+# TackQuote/tests/TestBootstrap.php) — only the framework classes it types
+# against. .github/ci/shopware-harness/composer.json pins the minimal vendor
+# tree for that (shopware/core + shopware/storefront 6.6.10.22, the version
+# the plugin was verified on), and PROJECT_ROOT points the bootstrap at it.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install xmllint (manifest XSD validation)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libxml2-utils
+
+      - name: Lint PHP
+        run: |
+          find . -path ./dist -prune -o -name '*.php' -print0 \
+            | xargs -0 -n1 -P4 php -l
+
+      - name: Validate plugin composer.json
+        run: composer validate --no-check-publish --no-check-lock --working-dir=TackQuote
+
+      - name: Validate app manifest
+        run: python3 TackQuoteApp/bin/validate-manifest.py
+
+      - name: Build Shopware artifacts
+        run: bash scripts/package.sh dist
+
+  phpunit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install Shopware test harness
+        run: |
+          composer install --no-interaction --no-progress --no-scripts \
+            --ignore-platform-reqs --working-dir=.github/ci/shopware-harness
+
+      - name: Run TackQuote unit tests
+        working-directory: TackQuote
+        env:
+          PROJECT_ROOT: ${{ github.workspace }}/.github/ci/shopware-harness
+        run: ../.github/ci/shopware-harness/vendor/bin/phpunit -c phpunit.xml.dist

@@ -86,8 +86,8 @@ export SHOPWARE_APP_SECRET=$(docker inspect tack-api-1 \
   --format '{{range .Config.Env}}{{println .}}{{end}}' \
   | grep '^SHOPWARE_APP_SECRET=' | cut -d= -f2)
 
-bash shopware/TackQuoteApp/bin/build-zip.sh
-# -> shopware/TackQuoteApp/dist/TackQuoteApp.zip
+bash TackQuoteApp/bin/build-zip.sh
+# -> TackQuoteApp/dist/TackQuoteApp.zip
 ```
 
 That script does two things the hand-built v1.2.0 asset got wrong, both of which
@@ -131,7 +131,7 @@ explicit that the extension API "can be used only by users", so an integration
 **"Upload extensions"** right:
 
 ```bash
-shopware-cli project extension upload ./shopware/TackQuoteApp --activate --increase-version
+shopware-cli project extension upload ./TackQuoteApp --activate --increase-version
 ```
 
 ### Shopware Cloud
@@ -214,7 +214,7 @@ commit one — `bin/validate-manifest.py` fails the build if you do.
 `<setup><registrationUrl>` is fetched **by the shop, over the public internet**.
 It follows a four-step HMAC handshake (GET register → signed JSON response →
 POST confirm → per-shop secret for all later traffic), specified in
-[`../../docs/SHOPWARE_APP_PROTOCOL.md`](../../docs/SHOPWARE_APP_PROTOCOL.md) with
+[`docs/SHOPWARE_APP_PROTOCOL.md`](../docs/SHOPWARE_APP_PROTOCOL.md) with
 citations to Shopware's own source.
 
 **This app cannot complete installation against an endpoint the shop cannot
