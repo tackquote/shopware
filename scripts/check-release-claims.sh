@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # README/release contract — fails CI if a merchant-facing README regresses on
-# either of the two defects that shipped in tackquote/tack-ecommerce-extensions#20
+# either of the two defects that shipped in the retired hub's issue #20 (archived)
 # (the former monorepo this repository was split out of):
 #
 #   1. A version-pinned release asset URL (`releases/download/vX.Y.Z/...`).
@@ -65,7 +65,7 @@ fi
 
 if [ "$fail" -ne 0 ]; then
   echo
-  echo "See tackquote/tack-ecommerce-extensions#20 for why these are load-bearing checks."
+  echo "See the retired hub's issue #20 (archived) for why these are load-bearing checks."
   exit 1
 fi
 

@@ -3,7 +3,7 @@
 Shopware 6 integrations for [TackQuote](https://tackquote.com) B2B quoting.
 
 Part of the TackQuote integrations index:
-[tackquote/tack-ecommerce-extensions](https://github.com/tackquote/tack-ecommerce-extensions).
+[github.com/tackquote](https://github.com/tackquote).
 
 | Directory | What it is | Release asset |
 | --- | --- | --- |
