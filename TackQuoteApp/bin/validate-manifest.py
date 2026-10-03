@@ -3,7 +3,11 @@
 
 Two layers, because one is not enough:
 
- 1. XSD validation against manifest-3.0.xsd from shopware/shopware trunk.
+ 1. XSD validation against manifest-2.0.xsd from shopware/shopware at the
+    v6.6.10.22 tag (the Shopware version the plugin is verified on, and the
+    newest manifest schema 6.6 ships; manifest-3.0.xsd only exists from 6.7).
+    Pinned to a tag, not trunk, so an upstream schema change cannot turn CI
+    or a release red (or green) without a change in this repository.
  2. The checks the XSD provably CANNOT make.
 
 Layer 2 exists because <meta> is declared `xs:choice maxOccurs="unbounded"`,
@@ -26,9 +30,11 @@ import sys
 import urllib.request
 import xml.etree.ElementTree as ET
 
+XSD_REF = "v6.6.10.22"
+XSD_NAME = "manifest-2.0.xsd"
 XSD_URL = (
-    "https://raw.githubusercontent.com/shopware/shopware/trunk/"
-    "src/Core/Framework/App/Manifest/Schema/manifest-3.0.xsd"
+    f"https://raw.githubusercontent.com/shopware/shopware/{XSD_REF}/"
+    f"src/Core/Framework/App/Manifest/Schema/{XSD_NAME}"
 )
 
 # Required by Shopware's runtime manifest validation but NOT by the XSD.
@@ -50,7 +56,8 @@ def ok(msg: str) -> None:
 
 
 def cached_xsd(script_dir: str) -> str | None:
-    path = os.path.join(script_dir, ".manifest-3.0.xsd")
+    # The cache name carries the ref, so changing XSD_REF never reuses a stale copy.
+    path = os.path.join(script_dir, f".{XSD_NAME[:-4]}-{XSD_REF}.xsd")
     if os.path.exists(path) and os.path.getsize(path) > 0:
         return path
     try:
@@ -89,7 +96,7 @@ def main(argv: list[str]) -> int:
                 text=True,
             )
             if result.returncode == 0:
-                ok("XSD validation (manifest-3.0.xsd)")
+                ok(f"XSD validation ({XSD_NAME} @ {XSD_REF})")
             else:
                 fail("XSD validation:\n" + (result.stderr or result.stdout).strip())
 

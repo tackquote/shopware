@@ -12,6 +12,8 @@ dist/
 node_modules/
 vendor/
 composer.lock
+# ...except the CI harness lock: CI installs exactly this tree, reproducibly.
+!.github/ci/shopware-harness/composer.lock
 target/
 
 # PHPUnit caches

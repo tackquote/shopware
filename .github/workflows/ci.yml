@@ -7,7 +7,8 @@ name: CI
 # TackQuote/tests/TestBootstrap.php) — only the framework classes it types
 # against. .github/ci/shopware-harness/composer.json pins the minimal vendor
 # tree for that (shopware/core + shopware/storefront 6.6.10.22, the version
-# the plugin was verified on), and PROJECT_ROOT points the bootstrap at it.
+# the plugin was verified on) and its committed composer.lock, and PROJECT_ROOT
+# points the bootstrap at it. The suite itself is the reusable phpunit.yml.
 
 on:
   push:
@@ -54,25 +55,7 @@ jobs:
       - name: Build Shopware artifacts
         run: bash scripts/package.sh dist
 
+  # The job itself lives in phpunit.yml so release.yml runs the identical
+  # suite before it publishes anything.
   phpunit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          tools: composer:v2
-          coverage: none
-
-      - name: Install Shopware test harness
-        run: |
-          composer install --no-interaction --no-progress --no-scripts \
-            --ignore-platform-reqs --working-dir=.github/ci/shopware-harness
-
-      - name: Run TackQuote unit tests
-        working-directory: TackQuote
-        env:
-          PROJECT_ROOT: ${{ github.workspace }}/.github/ci/shopware-harness
-        run: ../.github/ci/shopware-harness/vendor/bin/phpunit -c phpunit.xml.dist
+    uses: ./.github/workflows/phpunit.yml

@@ -61,7 +61,8 @@ python3 bin/validate-manifest.py
 
 Two layers, and the second is the one that matters:
 
-1. XSD validation against `manifest-3.0.xsd` from `shopware/shopware` trunk.
+1. XSD validation against `manifest-2.0.xsd` from `shopware/shopware` at the
+   pinned `v6.6.10.22` tag (not trunk).
 2. Checks the XSD **provably cannot** make.
 
 `<meta>` is declared `xs:choice maxOccurs="unbounded"`, so a manifest missing

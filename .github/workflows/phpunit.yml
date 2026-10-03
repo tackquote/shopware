@@ -1,0 +1,46 @@
+name: PHPUnit
+
+# The TackQuote plugin's unit suite, as a reusable workflow: called by ci.yml on
+# every push / pull request and by release.yml before anything is published, so
+# a tag can never ship a build whose tests fail.
+#
+# The suite needs no Shopware kernel, database or network (see
+# TackQuote/tests/TestBootstrap.php), only the framework classes it types
+# against. .github/ci/shopware-harness pins that vendor tree (shopware/core +
+# shopware/storefront 6.6.10.22) with a committed composer.lock, so every run
+# installs the same packages.
+#
+# Only extension requirements are ignored (the suite loads no ext-intl, ext-gd,
+# ext-pdo_mysql ... code paths). The PHP version requirement is still enforced:
+# the lock was resolved on PHP 8.2, and a runner on another PHP fails the install
+# instead of silently testing against packages that do not support it.
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install Shopware test harness
+        run: |
+          composer install --no-interaction --no-progress --no-scripts \
+            --ignore-platform-req='ext-*' --working-dir=.github/ci/shopware-harness
+
+      - name: Run TackQuote unit tests
+        working-directory: TackQuote
+        env:
+          PROJECT_ROOT: ${{ github.workspace }}/.github/ci/shopware-harness
+        run: ../.github/ci/shopware-harness/vendor/bin/phpunit -c phpunit.xml.dist

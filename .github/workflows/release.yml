@@ -17,7 +17,8 @@ name: Release Shopware ZIPs
 # files that existed nowhere in the repository) and installed but did nothing.
 #
 # To cut a release: push a `v*` tag. That's the whole process — this workflow
-# does the rest.
+# does the rest. The PHPUnit suite (phpunit.yml, shared with ci.yml) runs first;
+# the build/publish job needs it, so a red suite publishes nothing.
 on:
   push:
     tags:
@@ -27,7 +28,14 @@ permissions:
   contents: write
 
 jobs:
+  # The same unit suite ci.yml runs; nothing is built or published unless it passes.
+  phpunit:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/phpunit.yml
+
   build:
+    needs: phpunit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
