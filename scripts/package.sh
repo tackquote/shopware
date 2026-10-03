@@ -3,7 +3,7 @@
 # Build both installable Shopware artifacts, reproducibly.
 #
 # Carried over from the Shopware sections of scripts/package-all.sh in the
-# former monorepo (github.com/ackm04/tack-ecommerce-extensions), adapted to this
+# former monorepo (github.com/tackquote/tack-ecommerce-extensions), adapted to this
 # repository's flattened layout. The filenames and the internal zip structure are
 # unchanged, so existing `releases/latest/download/<asset>` links keep resolving
 # to the same kind of artifact:

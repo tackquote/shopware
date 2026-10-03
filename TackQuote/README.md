@@ -11,7 +11,7 @@ This directory is build/source only. No Shopware Store listing is claimed.
 > on the next release. The asset therefore always matches this directory's
 > current source — including the fixes recorded below — with no separate
 > "rebuild it yourself" step needed. (Releases up to v1.7.1 were cut from the
-> former monorepo, [ackm04/tack-ecommerce-extensions](https://github.com/ackm04/tack-ecommerce-extensions),
+> former monorepo, [tackquote/tack-ecommerce-extensions](https://github.com/tackquote/tack-ecommerce-extensions),
 > by the same packaging rules.)
 
 ## Tested version

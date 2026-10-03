@@ -6,7 +6,7 @@ name: Release Shopware ZIPs
 #   tack-shopware.zip       self-hosted plugin   (TackQuote/...)
 #   tack-shopware-app.zip   Shopware Cloud app   (TackQuoteApp/...)
 #
-# Carried over from the former monorepo (ackm04/tack-ecommerce-extensions),
+# Carried over from the former monorepo (tackquote/tack-ecommerce-extensions),
 # whose release.yml built every platform via scripts/package-all.sh. This repo
 # keeps the Shopware half of that: scripts/package.sh produces the SAME
 # filenames and the SAME internal zip structure, so README links of the form
