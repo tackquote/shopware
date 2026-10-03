@@ -11,7 +11,7 @@ This directory is build/source only. No Shopware Store listing is claimed.
 > on the next release. The asset therefore always matches this directory's
 > current source — including the fixes recorded below — with no separate
 > "rebuild it yourself" step needed. (Releases up to v1.7.1 were cut from the
-> former monorepo, tackquote/tack-ecommerce-extensions, retired 2026-10-04 (retired 2026-10-04),
+> former monorepo, tackquote/tack-ecommerce-extensions, retired 2026-10-04,
 > by the same packaging rules.)
 
 ## Tested version
@@ -320,8 +320,13 @@ Shopware Admin → **Extensions → My extensions → TackQuote → Configure**:
 
 ## Install (public release, or Composer path for maintainers)
 
-Download [`tack-shopware.zip`](https://github.com/tackquote/shopware/releases/latest/download/tack-shopware.zip)
-and follow the included README, or copy the extracted plugin into
+Download [`tack-shopware.zip`](https://github.com/tackquote/shopware/releases/latest/download/tack-shopware.zip).
+In the Shopware Administration, go to **Extensions → My extensions → Upload
+extension** and upload the zip, then click **Install** on the TackQuote row and
+switch its activation toggle on (an uploaded extension is not installed yet, and
+starts deactivated once installed;
+<https://docs.shopware.com/en/shopware-6-en/extensions/myextensions>).
+On the command line, copy the extracted plugin into
 `custom/plugins/TackQuote`. **The directory name must be exactly `TackQuote`** —
 Shopware resolves a plugin by matching the directory to the plugin class
 (`TackQuote\TackQuote\TackQuote`).
