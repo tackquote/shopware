@@ -11,7 +11,7 @@
         <description lang="de-DE">Ergaenzt Ihren Storefront um B2B-Angebotsanfragen und synchronisiert Katalog, Kunden und Auftraege mit TackQuote.</description>
         <author>TackQuote</author>
         <copyright>(c) TackQuote</copyright>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
         <license>MIT</license>
         <compatibility>&gt;=6.6.0</compatibility>
         <privacy>https://tackquote.com/privacy</privacy>
@@ -42,6 +42,26 @@
              ShopwareAppService.requireAppSecret() verifies the registration
              signature against. -->
     </setup>
+
+    <admin>
+        <!-- The TackQuote admin module. Shopware loads `source` in an iframe and
+             appends a query signed with the PER-SHOP secret (shop-id, shop-url,
+             timestamp, sw-version, ..., shopware-shop-signature). That signed
+             query is the sign-in: app.tackquote.com/shopware/app posts it to
+             POST https://api.tackquote.com/v1/shopware-app/bridge, which
+             verifies it and opens the shop's TackQuote workspace (created on
+             install, no separate TackQuote sign-up or "claim this shop" step).
+             `main-module` puts the same page behind "Open app" in
+             Extensions > My extensions. -->
+        <module name="tackquote"
+                source="https://app.tackquote.com/shopware/app"
+                parent="sw-extension"
+                position="50">
+            <label>TackQuote</label>
+            <label lang="de-DE">TackQuote</label>
+        </module>
+        <main-module source="https://app.tackquote.com/shopware/app"/>
+    </admin>
 
     <permissions>
         <!-- Reads only. TackQuote pulls catalog/customer/order data through the
