@@ -233,6 +233,28 @@ TackQuote reads the catalog through the Admin API credentials the shop hands ove
 at registration confirmation. No write scopes are requested, because the app does
 not write back to Shopware yet — see below.
 
+## Admin module: install finishes like OAuth (1.1.0)
+
+`<admin><module>` (and `<main-module>`, the "Open app" button) load
+`https://app.tackquote.com/shopware/app` inside the Shopware Administration.
+Shopware signs that iframe URL with the per-shop secret
+(`shopware-shop-signature`, HMAC-SHA256 of the query), and that signature is the
+sign-in:
+
+1. Install the app. Registration and confirmation run against the TackQuote API,
+   which creates the shop's own TackQuote workspace on the confirmation.
+2. Open **TackQuote** in the Administration. The module verifies the signed
+   query, proves the shop owns the Admin API credentials it handed over (a
+   token request at the shop's own URL), and offers **Open TackQuote**, which
+   opens the workspace signed in, in its own tab.
+
+There is no TackQuote sign-up, password or "claim this shop by id" step. Adding
+a login email, or moving the shop into an existing TackQuote workspace, are
+optional actions in TackQuote under Settings > Security.
+
+Older installs (1.0.0, no `<admin>`) keep working: the API side is compatible
+with them; they get the module after updating the app.
+
 ## Webhooks
 
 | name | event |
@@ -249,9 +271,6 @@ its body is parsed, and compared in constant time.
 
 Stated plainly rather than implied by the manifest:
 
-- **No admin module.** There is no `<admin>` section, so the app adds no UI
-  inside the Shopware administration. A merchant links their store to a
-  TackQuote tenant from the TackQuote seller portal, not from Shopware.
 - **No storefront "Request a Quote" button.** That is template work, and an app
   cannot ship Twig overrides the way `../TackQuote` does. Storefront quoting on
   Cloud needs an App Script or a theme-level change and is not built here.
