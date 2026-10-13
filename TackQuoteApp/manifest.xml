@@ -81,6 +81,13 @@
 
     <allowed-hosts>
         <host>api.tackquote.com</host>
+        <!-- The admin module and main-module iframes load from app.tackquote.com.
+             The manifest reference (developer.shopware.com, manifest-reference,
+             read 2026-10-13) defines allowed-hosts as "the external endpoints your
+             app is allowed to communicate with", and the admin-extension guide
+             shows the install asking the merchant to confirm the module host, so
+             it is listed here rather than left to that prompt. -->
+        <host>app.tackquote.com</host>
     </allowed-hosts>
 
     <webhooks>
